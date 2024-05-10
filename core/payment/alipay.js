@@ -76,5 +76,7 @@ export const extraAsUnify = () => {
   // #ifdef H5
   extra.returnUrl = returnUrl()
   // #endif
+  // #ifdef MP-ALIPAY
+  // #endif
   return extra
 }

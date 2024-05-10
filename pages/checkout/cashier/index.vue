@@ -128,6 +128,30 @@
     onLoad({ orderId }) {
       // 记录订单ID
       this.orderId = Number(orderId)
+	  
+	  // #ifdef MP-ALIPAY
+				my.getAuthCode({
+				  scopes: 'auth_user',
+				  success: res => {
+					const authCode = res.authCode;
+					// 在服务端获取用户信息
+					my.request({
+					  // 你的服务器地址
+					  url: 'https://devtgqy.yueyueyouqian.cn/api/cashier/alipayOpenId',
+					  data: {
+						authCode,
+					  },
+					  success(res) {
+						// 获取需要的用户信息
+						console.log(res)
+					  }
+					})
+				  },
+				  fail: err => {
+					console.log('my.getAuthCode 调用失败', err)
+				  }
+				});	
+	  // #endif
     },
 
     /**
