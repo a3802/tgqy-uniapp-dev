@@ -50,6 +50,25 @@ const paymentAsApp = options => {
   })
 }
 
+const paymentAsAlMp = options => {
+	  return new Promise((resolve, reject) => {
+		uni.requestPayment({
+		  provider: 'alipay',
+		  orderInfo: options.out_trade_no,
+
+		  success(res) {
+			const option = {
+			  isRequireQuery: true, // 是否需要主动查单
+			  outTradeNo: options.out_trade_no, // 交易订单号
+			  method: 'alipay'
+			}
+			resolve({ res, option })
+		  },
+		  fail: res => reject(res)
+		})
+	  })	
+}
+
 // 获取支付完成后跳转的url
 // #ifdef H5
 const returnUrl = () => {
@@ -63,7 +82,8 @@ const returnUrl = () => {
 export const payment = (option) => {
   const events = {
     [ClientEnum.H5.value]: paymentAsH5,
-    [ClientEnum.APP.value]: paymentAsApp
+    [ClientEnum.APP.value]: paymentAsApp,
+	[ClientEnum.MP_ALIPAY.value]: paymentAsAlMp
   }
   return events[platform](option)
 }
@@ -77,6 +97,12 @@ export const extraAsUnify = () => {
   extra.returnUrl = returnUrl()
   // #endif
   // #ifdef MP-ALIPAY
+		let res = my.getStorageSync({ key: 'alipay_open_id' });
+		if (res.success) {
+		    console.log("执行成功");
+			extra.openid = res.data
+		}
   // #endif
+
   return extra
 }

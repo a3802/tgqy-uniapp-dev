@@ -130,27 +130,32 @@
       this.orderId = Number(orderId)
 	  
 	  // #ifdef MP-ALIPAY
-				my.getAuthCode({
-				  scopes: 'auth_user',
-				  success: res => {
-					const authCode = res.authCode;
-					// 在服务端获取用户信息
-					my.request({
-					  // 你的服务器地址
-					  url: 'https://devtgqy.yueyueyouqian.cn/api/cashier/alipayOpenId',
-					  data: {
-						authCode,
-					  },
-					  success(res) {
-						// 获取需要的用户信息
-						console.log(res)
-					  }
-					})
+			my.getAuthCode({
+			  scopes: 'auth_user',
+			  success: res => {
+				const authCode = res.authCode;
+				// 在服务端获取用户信息
+				my.request({
+				  // 你的服务器地址
+				  url: 'https://devtgqy.yueyueyouqian.cn/api/cashier/alipayOpenId',
+				  data: {
+					authCode,
 				  },
-				  fail: err => {
-					console.log('my.getAuthCode 调用失败', err)
+				  success(res) {
+					// 获取需要的用户信息
+					console.log(res)
+					my.setStorage({
+					  key: 'alipay_open_id',
+					  data: res.data.data.open_id
+					});					
+					
 				  }
-				});	
+				})
+			  },
+			  fail: err => {
+				console.log('my.getAuthCode 调用失败', err)
+			  }
+			});	
 	  // #endif
     },
 
@@ -255,6 +260,7 @@
 
       // 订单提交成功后回调
       onSubmitCallback(result) {
+		console.log(result);
         const app = this
         const method = app.curPaymentItem.method
         const paymentData = result.data.payment

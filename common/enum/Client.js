@@ -7,5 +7,6 @@ import Enum from './enum'
 export default new Enum([
   { key: 'APP', name: 'APP端', value: 'APP' },
   { key: 'H5', name: 'H5端', value: 'H5' },
-  { key: 'MP_WEIXIN', name: '微信小程序端', value: 'MP-WEIXIN' }
+  { key: 'MP_WEIXIN', name: '微信小程序端', value: 'MP-WEIXIN' },
+  { key: 'MP_ALIPAY', name: '支付宝小程序', value: 'MP-ALIPAY' }
 ])
