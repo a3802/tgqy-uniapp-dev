@@ -286,7 +286,24 @@
 
       // 订单支付成功的回调方法
       // 这里只是前端支付api返回结果success,实际订单是否支付成功 以后端的查单和异步通知为准
-      onPaySuccess({ res, option: { isRequireQuery, outTradeNo, method } }) {
+      onPaySuccess({ res, option: { isRequireQuery, outTradeNo, tradeNo,method } }) {
+	  // #ifdef MP-ALIPAY
+			// my.tradePay ({
+			//   // 调用统一收单交易创建接口（alipay.trade.create），获得返回字段支付宝交易号 trade_no
+			//   tradeNO: tradeNo,
+			//   success: res => {
+			// 		// this.onTradeQuery(outTradeNo, method)
+			// 		// return true
+			// 	my.alert ({
+			// 	  content: JSON.stringify (res),
+			// 	});
+			//   },
+			//   fail: error => {
+			// 	console.error('调用 my.tradePay 失败: ', JSON.stringify(error));
+			//   },
+			// });
+			// this.onShowSuccess(res)
+	  // #endif
         const app = this
         // 判断是否需要主动查单
         // isRequireQuery为true代表需要主动查单

@@ -50,23 +50,55 @@ const paymentAsApp = options => {
   })
 }
 
+
+/**
+ * 发起支付请求 (用户支付宝小程序)
+ * @param {Object} option 参数
+ */
 const paymentAsAlMp = options => {
 	  return new Promise((resolve, reject) => {
-		uni.requestPayment({
-		  provider: 'alipay',
-		  orderInfo: options.out_trade_no,
+		  
+		// console.log(options);
+		// uni.requestPayment({
+		//   provider: 'alipay',
+		//   orderInfo: options.out_trade_no,
 
-		  success(res) {
-			const option = {
-			  isRequireQuery: true, // 是否需要主动查单
-			  outTradeNo: options.out_trade_no, // 交易订单号
-			  method: 'alipay'
-			}
-			resolve({ res, option })
-		  },
-		  fail: res => reject(res)
-		})
+		//   success(res) {
+		// 	console.log(res);
+		// 	const option = {
+		// 	  isRequireQuery: true, // 是否需要主动查单
+		// 	  outTradeNo: options.out_trade_no, // 交易订单号
+		// 	  tradeNo: options.trade_no,
+		// 	  method: 'alipay'
+		// 	}
+		// 	resolve({ res, option })
+		//   },
+		//   fail: res => reject(res)
+		// })
+		
+	  // #ifdef MP-ALIPAY
+		// console.log(options.tradeNO);
+			my.tradePay ({
+			  // 调用统一收单交易创建接口（alipay.trade.create），获得返回字段支付宝交易号 trade_no
+			  tradeNO: options.trade_no,
+			  success: res => {
+				const option = {
+					  isRequireQuery: true, // 是否需要主动查单
+					  outTradeNo: options.out_trade_no, // 交易订单号
+					  tradeNo: options.trade_no,
+					  method: 'alipay'
+				}
+				resolve({ res, option })
+			  },
+			  fail: error => {
+				console.error('调用 my.tradePay 失败: ', JSON.stringify(error));
+			  },
+			});
+	  // #endif		
+		
 	  })	
+	 
+
 }
 
 // 获取支付完成后跳转的url
